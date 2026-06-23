@@ -1,4 +1,12 @@
 # Trabalho-PGM
-Leitura de imagem PGM com menu interativo realizado exclusivamente por meio de incremento de ponteiro em varredura linear, sem o uso de índices ou aritmética de deslocamento explícita, implementação de novas funções mais complexas.
+Disciplina: AEDS I
+Turma: 2026-1
+Autores: Maick Carvalho e Francisco Schneedorf.
 
-Feito por Maick Carvalho e Francisco Schneedorf.
+---- INSTRUÇÕES ----
+. Como compilar:
+
+
+
+
+. Como utilizar o programa: 
