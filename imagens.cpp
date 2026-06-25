@@ -98,30 +98,61 @@ int binPGM(tImagem img, int col, int lin, int tons, int limiar)
 int esquerdaPGM(tImagem img, int *lin, int *col)
 {
     // Variaveis
-    static tImagem aux; // Criando uma matriz auxiliar para fazer a copia e nao perder os pixels nas posicoes originais durante a rotacao
-    int lin_original = *lin;
+    static tImagem aux;      // Criando uma matriz auxiliar para fazer a copia e nao perder os pixels nas posicoes originais durante a rotacao
+    int lin_original = *lin; // Guardando os valores originais
     int col_original = *col;
+    int *pOrigem = &img[0][0]; // Ponteiro que aponta para o primeiro pixel da imagem
+    int total = (*lin) * (*col); 
 
-    // Laco para inverter pixel a pixel
-    for (int i = 0; i < *lin; i++)
+    /*------ MONTANDO AUX ------*/
+    // Laco para percorrer as linhas
+    for (int i = 0; i < lin_original; i++)
     {
-        for (int j = 0; j < *col; j++)
+        int *pDestino = &aux[0][0]; // Criando ponteiro para a imagem auxiliar
+
+        // Laco para colocar o ponteiro na ultima linha util da imagem nova
+        for (int k = 0; k < col_original - 1; k++)
         {
-            aux[col_original - 1 - j][i] = img[i][j]; // Coluna 0 vira linha 0, porem invertida.
+            pDestino += lin_original; // Desce uma linha na imagem auxiliar compactada
+        }
+
+        // Laco para andar para a direita ate a coluna i da imagem nova
+        for (int k = 0; k < i; k++)
+        {
+            pDestino++;
+        }
+
+        // Laco para percorrer as colunas da linha original
+        for (int j = 0; j < col_original; j++)
+        {
+            *pDestino = *pOrigem; // Copiando o pixel da imagem original para o local onde o pDestino aponta
+
+            pOrigem++; // Depois de copiar o pixel atual, o ponteiro original passa para o proximo pixel    
+
+            // Verificando se ainda ha pixels para copiar
+            if (j < col_original - 1)
+            {           
+                pDestino -= lin_original; // Sobe uma linha em aux
+            }
         }
     }
 
-    // Atualizando o tamanho da imagem pos-rotacao
+    /*------ COPIANDO AUX PARA IMG ORIGINAL ------*/
+    // Atualizando dimensoes
     *lin = col_original;
     *col = lin_original;
 
-    // Laco para passar a matriz rotacionada para a imagem original
-    for (int i = 0; i < *lin; i++)
+    // Preparando para copiar aux de volta para img
+    int *pAux = &aux[0][0]; // Aponta para o começo de aux
+    int *pImg = &img[0][0]; // Aponta para o começo de img
+
+    for (int i = 0; i < total; i++)
     {
-        for (int j = 0; j < *col; j++)
-        {
-            img[i][j] = aux[i][j];
-        }
+        *pImg = *pAux; // Copiando o pixel de aux para img
+
+        // Avançando os ponteiros
+        pImg++;
+        pAux++;
     }
 
     return 0;
