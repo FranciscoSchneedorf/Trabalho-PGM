@@ -28,12 +28,9 @@ int carregaPGM(string nome, tImagem img, int *col, int *lin, int *tons)
 
     // Leitura do arquivo
     arquivo >> *col >> *lin >> *tons;
-    for (int i = 0; i < *lin; i++)
+    for (int *p = &img[0][0]; p < img[0][0] + (*lin) * (*col); p++)
     {
-        for (int j = 0; j < *col; j++)
-        {
-            arquivo >> img[i][j];
-        }
+        arquivo >> *p;
     }
 
     arquivo.close();
@@ -59,13 +56,15 @@ int salvaPGM(string nome, tImagem img, int col, int lin, int tons)
             << tons << endl;
 
     // Salvando o arquivo
+int *p = &img[0][0];
     for (int i = 0; i < lin; i++)
     {
-        for (int j = 0; j < col; j++)
+        for (int *q = p; q < p +col; q++)
         {
-            arquivo << img[i][j] << " ";
+            arquivo << *q << " ";
         }
         arquivo << endl;
+        p += col;
     }
 
     arquivo.close();
