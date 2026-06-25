@@ -69,12 +69,9 @@ int salvaPGM(string nome, tImagem img, int col, int lin, int tons)
 int clarear_escurecerPGM(tImagem img, int col, int lin, int valor, int tons)
 {
     // Clareando a imagem
-    for (int i = 0; i < lin; i++)
+    for (int *p = &img[0][0]; p < &img[0][0] + lin * col; p++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            img[i][j] = max(0, min(img[i][j] + valor, tons)); // Compara os valores e min escolhe o menor, impedindo de ultrapassar. Max escolhe sempre 0 se o valor for menor que 0
-        }
+        *p = max(0, min(*p + valor, tons)); // Compara os valores e min escolhe o menor, impedindo de ultrapassar. Max escolhe sempre 0 se o valor for menor que 0
     }
 
     return 0;
