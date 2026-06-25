@@ -58,7 +58,7 @@ int salvaPGM(string nome, tImagem img, int col, int lin, int tons)
     // Salvando o arquivo
 for (int *p = &img[0][0]; *p < &img[0][0] + (*lin) * (*col); p++)
     {
-            arquivo << *P << " ";
+            arquivo << *p << " ";
         arquivo << endl;
     }
 
