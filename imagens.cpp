@@ -80,19 +80,16 @@ int clarear_escurecerPGM(tImagem img, int col, int lin, int valor, int tons)
 int binPGM(tImagem img, int col, int lin, int tons, int limiar)
 {
     // Laco para percorrer o arquivo-texto linha a linha pelos pixels
-    for (int i = 0; i < lin; i++)
+    for (int *p = &img[0][0]; p < &img[0][0] + lin * col; p++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            if (img[i][j] > limiar) // Verificando se o tom em determinada posicao ij e maior do que o limiar dado pelo usuario.
+            if (*p > limiar) // Verificando se o tom em determinada posicao ij e maior do que o limiar dado pelo usuario.
             {
-                img[i][j] = tons;
+                *p = tons;
             }
             else // Se o tom naquela posicao for menor igual ao limiar, vira 0
             {
-                img[i][j] = 0;
-            }
-        }
+                *p = 0;
+            }  
     }
 
     return 0;
