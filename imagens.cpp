@@ -316,3 +316,5 @@ int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento)
 
     return 0;
 }
+
+int iconizacaoPGM(tImagem img, )

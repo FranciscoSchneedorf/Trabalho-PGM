@@ -474,6 +474,11 @@ int main()
             break;
         }
 
+        case 8:
+        {
+            //Variaveis 
+        }
+
         default:
         {
             cout << "ERRO: Opcao invalida" << endl;
