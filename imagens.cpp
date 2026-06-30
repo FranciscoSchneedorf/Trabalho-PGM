@@ -161,30 +161,50 @@ int esquerdaPGM(tImagem img, int *lin, int *col)
 int direitaPGM(tImagem img, int *lin, int *col)
 {
     // Variaveis
-    static tImagem aux; // Criando uma matriz auxiliar para fazer a copia e nao perder os pixels nas posicoes originais durante a rotacao
+    static tImagem aux;
     int lin_original = *lin;
     int col_original = *col;
+    int *pOrigem = &img[0][0];
+    int total = (*lin) * (*col);
 
-    // Laco para inverter pixel a pixel
-    for (int i = 0; i < *lin; i++)
+    /*------ MONTANDO AUX ------*/
+    for (int i = 0; i < lin_original; i++)
     {
-        for (int j = 0; j < *col; j++) //
+        int *pDestino = &aux[0][0]; // Começa na primeira linha da imagem auxiliar
+
+        // Laco para andar para a direita ate a coluna (lin_original - 1 - i)
+        for (int k = 0; k < lin_original - 1 - i; k++)
         {
-            aux[j][lin_original - 1 - i] = img[i][j]; // Linha 0 vira a ultima coluna, porem invertida
+            pDestino++;
+        }
+
+        // Laco para percorrer as colunas da linha original
+        for (int j = 0; j < col_original; j++)
+        {
+            *pDestino = *pOrigem; // Copiando o pixel da imagem original para o local onde o pDestino aponta
+
+            pOrigem++; // Avanca para o proximo pixel da imagem original
+
+            // Verificando se ainda ha pixels para copiar
+            if (j < col_original - 1)
+            {
+                pDestino += lin_original; // Desce uma linha em aux
+            }
         }
     }
 
-    // Atualizando o tamanho da imagem pos-rotacao
+    /*------ COPIANDO AUX PARA IMG ORIGINAL ------*/
     *lin = col_original;
     *col = lin_original;
 
-    // Laco para passar a matriz rotacionada para a imagem original
-    for (int i = 0; i < *lin; i++)
+    int *pAux = &aux[0][0];
+    int *pImg = &img[0][0];
+
+    for (int i = 0; i < total; i++)
     {
-        for (int j = 0; j < *col; j++)
-        {
-            img[i][j] = aux[i][j];
-        }
+        *pImg = *pAux;
+        pImg++;
+        pAux++;
     }
 
     return 0;
@@ -192,31 +212,31 @@ int direitaPGM(tImagem img, int *lin, int *col)
 
 int verticalPGM(tImagem img, int lin, int col)
 {
-    // Variaveis
-    static tImagem aux; // Criando uma matriz auxiliar para fazer a copia e nao perder os pixels nas posicoes originais durante a rotacao
-    int lin_original = lin;
-    int col_original = col;
+    static tImagem aux;
 
-    // Laco para inverter pixel a pixel
-    for (int i = 0; i < lin; i++)
+    int *pOrigem = &img[0][0];                  // Aponta para o inicio da imagem original
+    int *pDestino = &aux[0][0] + (lin - 1) * col; // Aponta para o inicio da ultima linha de aux
+
+    // Laco para percorrer as linhas da imagem original
+    for (int *fimLinhas = pOrigem + lin * col; pOrigem < fimLinhas; pDestino -= col)
     {
-        for (int j = 0; j < col; j++) //
+        // Laco para copiar uma linha inteira (col pixels)
+        for (int *fimLinha = pOrigem + col; pOrigem < fimLinha; pOrigem++, pDestino++)
         {
-            aux[lin_original - 1 - i][j] = img[i][j]; // Linha inverte, coluna permanece igual
+            *pDestino = *pOrigem;
         }
+
+        pDestino -= col; // Volta pDestino para o inicio da linha que acabou de copiar (compensa o avanco do laco interno)
     }
 
-    // Atualizando o tamanho da imagem pos-rotacao
-    lin = lin_original;
-    col = col_original;
+    // Laco para copiar aux de volta para img
+    int *pAux = &aux[0][0];
+    int *pImg = &img[0][0];
+    int *fim = pImg + lin * col;
 
-    // Laco para passar a matriz rotacionada para a imagem original
-    for (int i = 0; i < lin; i++)
+    for (; pImg < fim; pImg++, pAux++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            img[i][j] = aux[i][j];
-        }
+        *pImg = *pAux;
     }
 
     return 0;
@@ -224,45 +244,41 @@ int verticalPGM(tImagem img, int lin, int col)
 
 int horizontalPGM(tImagem img, int lin, int col)
 {
-    // Variaveis
-    static tImagem aux; // Criando uma matriz auxiliar para fazer a copia e nao perder os pixels nas posicoes originais durante a rotacao
-    int lin_original = lin;
-    int col_original = col;
+    static tImagem aux;
 
-    // Laco para inverter pixel a pixel
-    for (int i = 0; i < lin; i++)
+    int *pOrigem = &img[0][0];                  // Aponta para o inicio da imagem original
+    int *pDestino = &aux[0][0] + (lin - 1) * col; // Aponta para o inicio da ultima linha de aux
+
+    // Laco para percorrer as linhas da imagem original
+    for (int *fimLinhas = pOrigem + lin * col; pOrigem < fimLinhas; pDestino += 2 * col)
     {
-        for (int j = 0; j < col; j++) //
+        // Laco para copiar uma linha inteira (col pixels), de tras para frente
+        for (int *fimLinha = pOrigem + col; pOrigem < fimLinha; pOrigem++, pDestino--)
         {
-            aux[i][col_original - 1 - j] = img[i][j]; // Coluna inverte, linha permanece igual
+            *pDestino = *pOrigem;
         }
     }
 
-    // Atualizando o tamanho da imagem pos-rotacao
-    lin = lin_original;
-    col = col_original;
+    // Laco para copiar aux de volta para img
+    int *pAux = &aux[0][0];
+    int *pImg = &img[0][0];
+    int *fim = pImg + lin * col;
 
-    // Laco para passar a matriz rotacionada para a imagem original
-    for (int i = 0; i < lin; i++)
+    for (; pImg < fim; pImg++, pAux++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            img[i][j] = aux[i][j];
-        }
+        *pImg = *pAux;
     }
 
     return 0;
 }
 
+
 int negativoPGM(tImagem img, int lin, int col, int tons)
 {
     // Laco para passar por todos os pixel da matriz
-    for (int i = 0; i < lin; i++)
+    for (int *p = 0; p < &img[0][0] + col* lin; p++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            img[i][j] = tons - img[i][j]; // Subtrai-se de 255 o valor do pixel atual. Se for 0, 255 - 0 = 255. Logo, o pixel que era preto vira brnaco, e vice-versa
-        }
+            *p = tons - *p; // Subtrai-se de 255 o valor do pixel atual. Se for 0, 255 - 0 = 255. Logo, o pixel que era preto vira brnaco, e vice-versa
     }
 
     return 0;
@@ -275,40 +291,43 @@ int passabaixaPGM(tImagem img, int lin, int col)
     static tImagem aux;
 
     // Laco para copiar a matriz original para aux, para nao altera-la durante os lacos
-    for (int i = 0; i < lin; i++)
+    int *origem = &img[0][0];
+    int *destino = &aux[0][0];
+    int *fim = origem + lin * col;
+
+    for (; origem < fim; origem++, destino++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            aux[i][j] = img[i][j];
-        }
+        *destino = *origem;
     }
 
     // Laco para passar por todos os pixels da imagem, comecando em 1 para linhas e colunas para nao contabilizar as bordas
-    for (int i = 1; i < lin - 1; i++)
+    for (int *linha_central = &img[1][1]; linha_central < &img[lin - 1][1]; linha_central += col)
     {
-        for (int j = 1; j < col - 1; j++)
+        for (int *p = linha_central; p < linha_central+(col - 2); p++)
         {
             soma = 0; // Soma zerada a cada pixel
 
-            for (int a = -1; a <= 1; a++) // Laco para encontrar os vizinhos do pixel central
+            for (int *linha_viz = p - col - 1; linha_viz <= p + col; linha_viz += col) // Laco para encontrar os vizinhos do pixel central
             {
-                for (int b = -1; b <= 1; b++)
+                for (int *viz = linha_viz; viz <= linha_viz + 2; viz++)
                 {
-                    soma = soma + img[i + a][j + b]; // a e b variam de -1 a 1 para acessar os vizinhos
+                    soma = soma + *viz;
                 }
             }
 
-            aux[i][j] = soma / 9; // Alterando o pixel central
+            *(&aux[0][0] + (p - &img[0][0])) = soma / 9; // Alterando o pixel central
         }
     }
 
     // Laco para copiar a imagem filtrada para a original
-    for (int i = 0; i < lin; i++)
+
+    int *source = &aux[0][0];
+    int *destino = &img[0][0];
+    int *limite = destino + lin * col;
+
+    for (; destino < limite; destino++, source++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            img[i][j] = aux[i][j];
-        }
+        *destino = *source;
     }
 
     return 0;
@@ -321,11 +340,13 @@ int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento)
     int fator_atual = 0;
 
     // Laco para percorrer pixel a pixel, decrescendo de acordo com o fator e a camada em que se encontra
-    for (int i = 0; i < lin; i++)
-    {
-        for (int j = 0; j < col; j++)
-        {
-            camada = min(min(i, j), min(lin - 1 - i, col - 1 - j)); // Calculando a menor distancia entre o pixel e as bordas; A menor distancia indica em que camada o pixel esta
+    for (int *p = &img[0][0]; p < &img[0][0] + (lin) * (col); p++){
+
+    int offset = p - &img[0][0];   // posição linear do pixel
+    int i = offset / col;          // linha
+    int j = offset % col;          // coluna
+
+            camada = min(min(i, lin - 1 - i), min(j, col - 1 - j)); // Calculando a menor distancia entre o pixel e as bordas; A menor distancia indica em que camada o pixel esta
 
             fator_atual = fator - (camada * decremento);
 
@@ -336,7 +357,6 @@ int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento)
             }
 
             img[i][j] = max(0, img[i][j] - fator_atual); // Escurece o pixel, sem deixar ficar abaixo de 0
-        }
     }
 
     return 0;
