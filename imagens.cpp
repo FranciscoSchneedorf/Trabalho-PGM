@@ -5,6 +5,25 @@
 
 using namespace std;
 
+
+int lerInteiro(string mensagem)
+{
+    int valor = 0;
+    cout << mensagem;
+    cin >> valor;
+
+    while (cin.fail())
+    {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "ERRO: Entrada invalida. Digite um numero: " << endl;
+        cin >> valor;
+    }
+
+    return valor;
+}
+
+
 int carregaPGM(string nome, tImagem img, int *col, int *lin, int *tons)
 {
     // Variaveis
@@ -200,6 +219,7 @@ int direitaPGM(tImagem img, int *lin, int *col)
     *col = lin_original;
 
     // Preparando para copiar aux de volta para img
+
     int *pAux = &aux[0][0]; // Aponta para o começo de aux
     int *pImg = &img[0][0]; // Aponta para o começo de img
 
@@ -365,4 +385,21 @@ int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento)
     }
 
     return 0;
+}
+
+int redimensionamentoPGM(tImagem img, int *lin, int *col)
+{
+    // Variaveis
+    static tImagem aux; // Criando uma matriz auxiliar para fazer a copia e nao perder os pixels nas posicoes originais durante a rotacao
+    int lin_original = *lin;
+    int col_original = *col;
+    int fator, modo;    
+
+    // Entrada de dados
+    cout << "Informe o fator de redimensionamento: " << endl;
+    cin >> fator;
+    cout << "Informe o modo desejado" << endl;
+    cout << "[1] Ampliacao" << endl;
+    cout << "[2] Reducao" << endl;
+    
 }

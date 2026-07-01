@@ -7,23 +7,6 @@ using namespace std;
 
 // Funcoes secundarias
 
-int lerInteiro(string mensagem)
-{
-    int valor = 0;
-    cout << mensagem;
-    cin >> valor;
-
-    while (cin.fail())
-    {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "ERRO: Entrada invalida. Digite um numero: " << endl;
-        cin >> valor;
-    }
-
-    return valor;
-}
-
 int menu()
 {
     // Variaveis
@@ -43,7 +26,6 @@ int menu()
 
     return escolha;
 }
-
 
 // Funcao principal
 
