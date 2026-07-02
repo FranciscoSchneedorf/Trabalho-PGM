@@ -15,7 +15,7 @@ typedef int tImagem[MAX_LIN][MAX_COL];
 // Funcoes de leitura e escrita e verificacao
 int carregaPGM(string nome, tImagem img, int *col, int *lin, int *tons);
 int salvaPGM(string nome, tImagem img, int col, int lin, int tons);
-int lerInteiro(const char mensagem[]);
+int lerInteiro(string mensagem);
 
 // Funcoes de processamento
 int clarear_escurecerPGM(tImagem img, int col, int lin, int valor, int tons);
@@ -29,5 +29,7 @@ int horizontalPGM(tImagem img, int lin, int col);
 int negativoPGM(tImagem img, int lin, int col, int tons);
 int passabaixaPGM(tImagem img, int lin, int col);
 int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento);
+
+int redimensionamentoPGM(tImagem img, int *lin, int *col);
 
 #endif
