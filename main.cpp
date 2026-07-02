@@ -2,27 +2,9 @@
 #include <string>
 #include "imagens.h"
 
-
 using namespace std;
 
 // Funcoes secundarias
-
-int lerInteiro(string mensagem)
-{
-    int valor = 0;
-    cout << mensagem;
-    cin >> valor;
-
-    while (cin.fail())
-    {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "ERRO: Entrada invalida. Digite um numero: " << endl;
-        cin >> valor;
-    }
-
-    return valor;
-}
 
 int menu()
 {
@@ -37,13 +19,14 @@ int menu()
     cout << "[5] Imagem negativa" << endl;
     cout << "[6] Filtro passa-baixa" << endl;
     cout << "[7] Escurecer borda" << endl;
+    cout << "[11] Redimensionamento por fator inteiro" << endl;
+    cout << "[12] Recorte de regiao" << endl;
     cout << "[0] Sair" << endl;
 
     escolha = lerInteiro(": "); // Verificando se um numero foi digitado
 
     return escolha;
 }
-
 
 // Funcao principal
 
@@ -462,6 +445,84 @@ int main()
             cin >> nome_user;
 
             sucesso = salvaPGM(nome_user + "_7" + ".pgm", img_entrada, colunas, linhas, tons);
+
+            if (sucesso != 0)
+            {
+                cout << "ERRO: Nao foi possivel salvar o arquivo." << endl;
+                break;
+            }
+
+            cout << "O arquivo foi salvo corretamente. " << endl;
+
+            break;
+        }
+
+        case 11:
+        {
+            // Variaveis
+            int redimensionamento = 0, sucesso = 0;
+
+            // Verificando se a imagem foi inicializada
+            if (linhas == 0)
+            {
+                cout << "Nenhuma imagem foi inicializada. Tente novamente." << endl;
+                break;
+            }
+
+            redimensionamento = redimensionamentoPGM(img_entrada, &linhas, &colunas);
+
+            // Verificando se a funcao foi executada corretamente
+            if (redimensionamento != 0)
+            {
+                cout << "ERRO: Nao foi possivel aplicar o redimensionamento." << endl;
+
+                break;
+            }
+
+            cout << "Redimensionamento aplicado com sucesso!" << endl;
+
+            cout << "Escreva o nome do arquivo a ser salvo: " << endl;
+            cin >> nome_user;
+
+            sucesso = salvaPGM(nome_user + "_11" + ".pgm", img_entrada, colunas, linhas, tons);
+
+            if (sucesso != 0)
+            {
+                cout << "ERRO: Nao foi possivel salvar o arquivo." << endl;
+                break;
+            }
+
+            cout << "O arquivo foi salvo corretamente. " << endl;
+
+            break;
+        }
+
+        case 12:
+        {
+            // Variaveis
+            int recorte = 0, sucesso = 0;
+
+            // Verificando se a imagem foi inicializada
+            if (linhas == 0)
+            {
+                cout << "Nenhuma imagem foi inicializada. Tente novamente." << endl;
+                break;
+            }
+
+            recorte = recortePGM(img_entrada, &linhas, &colunas);
+
+            if (recorte != 0)
+            {
+                cout << "ERRO: Nao foi possivel recortar a imagem" << endl;
+                break;
+            }
+
+            cout << "Imagem recortada com sucesso!" << endl;
+
+            cout << "Escreva o nome do arquivo a ser salvo: " << endl;
+            cin >> nome_user;
+
+            sucesso = salvaPGM(nome_user + "_12" + ".pgm", img_entrada, colunas, linhas, tons);
 
             if (sucesso != 0)
             {
