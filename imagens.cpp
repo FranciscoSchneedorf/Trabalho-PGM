@@ -393,7 +393,7 @@ int redimensionamentoPGM(tImagem img, int *lin, int *col)
     int col_original = *col;
     int fator, modo;
     int nova_lin, nova_col;
-    
+
     // Entrada de dados
     cout << "Informe o fator de redimensionamento: " << endl;
     fator = lerInteiro(": ");
@@ -410,6 +410,7 @@ int redimensionamentoPGM(tImagem img, int *lin, int *col)
     cout << "[2] Reducao" << endl;
     modo = lerInteiro(": ");
 
+    /*------ MONTANDO AUX ------*/
     // Ampliacao
     if (modo == 1)
     {
@@ -454,6 +455,7 @@ int redimensionamentoPGM(tImagem img, int *lin, int *col)
             }
         }
     }
+    // Reducao
     else if (modo == 2)
     {
         // Calcula as novas dimensoes
@@ -492,6 +494,8 @@ int redimensionamentoPGM(tImagem img, int *lin, int *col)
         return 1;
     }
 
+    
+    /*------ COPIANDO AUX PARA IMG ORIGINAL ------*/
     // Atualiza as dimensoes da imagem
     *lin = nova_lin;
     *col = nova_col;
@@ -508,6 +512,105 @@ int redimensionamentoPGM(tImagem img, int *lin, int *col)
 
         pImg++;
         pAux++;
+    }
+
+    return 0;
+}
+
+int recortePGM(tImagem img, int *lin, int *col)
+{
+    // Variaveis
+    static tImagem aux;
+
+    int lin_original = *lin;
+    int col_original = *col;
+
+    int linha_inicio, coluna_inicio;
+    int altura, largura;
+
+    // Entrada de dados
+    cout << "Informe a linha inicial do recorte: " << endl;
+    linha_inicio = lerInteiro(": ");
+
+    cout << "Informe a coluna inicial do recorte: " << endl;
+    coluna_inicio = lerInteiro(": ");
+
+    cout << "Informe a altura do recorte: " << endl;
+    altura = lerInteiro(": ");
+
+    cout << "Informe a largura do recorte: " << endl;
+    largura = lerInteiro(": ");
+
+    // Verificacoes
+    if (linha_inicio < 0 || coluna_inicio < 0)
+    {
+        cout << "ERRO: Linha ou coluna inicial invalida." << endl;
+        return 1;
+    }
+
+    if (altura <= 0 || largura <= 0)
+    {
+        cout << "ERRO: Altura ou largura invalida." << endl;
+        return 1;
+    }
+
+    if (linha_inicio + altura > lin_original || coluna_inicio + largura > col_original)
+    {
+        cout << "ERRO: Regiao solicitada ultrapassa os limites da imagem." << endl;
+        return 1;
+    }
+
+    // Ponteiro para escrever a imagem auxiliar
+    int *pAux = &aux[0][0];
+
+    /*------ MONTANDO AUX ------*/
+    // Percorrendo as lihas do recorte
+    for (int i = 0; i < altura; i++)
+    {
+        int *pOrigem = &img[0][0]; /* Ponteiro que aponta para o comeco da imagem a cada laco, para encontrar o ponto inicial daquela linha.
+        Ele deve caminhar pelas linhas e colunas para o recorte desejado */
+
+        // Levando pOrigem ate a linha correta
+        for (int k = 0; k < linha_inicio + i; k++)
+        {
+            for (int c = 0; c < col_original; c++)
+            {
+                pOrigem++; // Fazendo pOrigem pular uma linha inteira
+            }
+        }
+
+        // Levando pOrigem ate a coluna correta
+        for (int k = 0; k < coluna_inicio; k++)
+        {
+            pOrigem++;
+        }
+
+        // Atribuindo pAux os valores ate o ultimo pixel que abrange a largura desejada
+        for (int j = 0; j < largura; j++)
+        {
+            *pAux = *pOrigem;
+
+            pAux++;
+            pOrigem++;
+        }
+    }
+
+    
+    /*------ COPIANDO AUX PARA IMG ORIGINAL ------*/
+    *lin = altura;
+    *col = largura;
+
+    int total = (*lin) * (*col);
+
+    int *pOrigemAux = &aux[0][0];
+    int *pImg = &img[0][0];
+
+    for (int i = 0; i < total; i++)
+    {
+        *pImg = *pOrigemAux;
+
+        pImg++;
+        pOrigemAux++;
     }
 
     return 0;

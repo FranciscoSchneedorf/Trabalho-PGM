@@ -31,5 +31,6 @@ int passabaixaPGM(tImagem img, int lin, int col);
 int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento);
 
 int redimensionamentoPGM(tImagem img, int *lin, int *col);
+int recortePGM(tImagem img, int *lin, int *col);
 
 #endif

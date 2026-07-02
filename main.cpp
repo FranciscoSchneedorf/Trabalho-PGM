@@ -20,6 +20,7 @@ int menu()
     cout << "[6] Filtro passa-baixa" << endl;
     cout << "[7] Escurecer borda" << endl;
     cout << "[11] Redimensionamento por fator inteiro" << endl;
+    cout << "[12] Recorte de regiao" << endl;
     cout << "[0] Sair" << endl;
 
     escolha = lerInteiro(": "); // Verificando se um numero foi digitado
@@ -484,6 +485,44 @@ int main()
             cin >> nome_user;
 
             sucesso = salvaPGM(nome_user + "_11" + ".pgm", img_entrada, colunas, linhas, tons);
+
+            if (sucesso != 0)
+            {
+                cout << "ERRO: Nao foi possivel salvar o arquivo." << endl;
+                break;
+            }
+
+            cout << "O arquivo foi salvo corretamente. " << endl;
+
+            break;
+        }
+
+        case 12:
+        {
+            // Variaveis
+            int recorte = 0, sucesso = 0;
+
+            // Verificando se a imagem foi inicializada
+            if (linhas == 0)
+            {
+                cout << "Nenhuma imagem foi inicializada. Tente novamente." << endl;
+                break;
+            }
+
+            recorte = recortePGM(img_entrada, &linhas, &colunas);
+
+            if (recorte != 0)
+            {
+                cout << "ERRO: Nao foi possivel recortar a imagem" << endl;
+                break;
+            }
+
+            cout << "Imagem recortada com sucesso!" << endl;
+
+            cout << "Escreva o nome do arquivo a ser salvo: " << endl;
+            cin >> nome_user;
+
+            sucesso = salvaPGM(nome_user + "_12" + ".pgm", img_entrada, colunas, linhas, tons);
 
             if (sucesso != 0)
             {
