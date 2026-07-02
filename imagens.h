@@ -1,5 +1,6 @@
 #ifndef IMAGENS_H
 #define IMAGENS_H
+#define TAM_ICONE 32
 
 #include <string>
 
@@ -28,5 +29,6 @@ int horizontalPGM(tImagem img, int lin, int col);
 int negativoPGM(tImagem img, int lin, int col, int tons);
 int passabaixaPGM(tImagem img, int lin, int col);
 int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento);
+int iconizarPGM(tImagem img, int lin, int col, int tons, string nome_s);
 
 #endif

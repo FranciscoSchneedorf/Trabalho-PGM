@@ -316,3 +316,78 @@ int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento)
 
     return 0;
 }
+
+int iconizarPGM(tImagem img, int lin, int col, int tons, string nome_s)
+{
+    printf ("DEBUG: linhas=%d colunas=%d\n", lin, col);
+    printf ("DEBUG: TAM_ICONE=%d\n", TAM_ICONE);
+    // Variáveis
+    long soma[TAM_ICONE * TAM_ICONE];
+    int cont[TAM_ICONE * TAM_ICONE];
+    long *ps;
+    int *pc;
+
+    // Zerar acumuladores
+    for (ps = soma, pc = cont; ps < soma + TAM_ICONE * TAM_ICONE; ps++, pc++)
+    {
+        *ps = 0;
+        *pc = 0;
+    }
+
+    // Varredura linear pela matriz de píxels de origem
+    int lin_atual = 0, col_atual = 0;
+
+        for (int *p = &img[0][0]; p < &img[0][0] + lin * col; p++)
+        {
+        
+        
+        int bi = (lin_atual * TAM_ICONE) / lin;
+        int bj = (col_atual * TAM_ICONE) / col;
+
+        long *destSoma = soma + (bi * TAM_ICONE + bj);
+        int *destCont = cont + (bi * TAM_ICONE + bj);
+
+        // Leitura do píxel via *p
+
+        *destSoma += *p;
+        *destCont += 1;
+
+        col_atual++;
+        if (col_atual == col)
+        {
+            col_atual = 0;
+            lin_atual++;
+        }
+        
+    }
+
+    // Cálculo da média de cada célula do ícone
+    int icone[TAM_ICONE * TAM_ICONE];
+    int *pi = icone;
+    ps = soma;
+    pc = cont;
+    for ( ; pi < icone + TAM_ICONE * TAM_ICONE; pi++, ps++, pc++)
+    {
+        *pi = (*pc > 0) ? (int)(*ps / *pc) : 0;
+    }
+
+    // Ajuda a salvar o arquivo
+    ofstream arquivo(nome_s);
+
+    if (!arquivo.is_open())
+    {
+        cout << "ERRO: Não foi possível salvar o arquivo." << endl;
+        return 1;
+    }
+    
+    arquivo << "P2" << endl << TAM_ICONE << " " << TAM_ICONE << endl << tons << endl;
+
+    for (int *pw = icone; pw < icone + TAM_ICONE *TAM_ICONE; pw++)
+    {
+        arquivo << *pw << " ";
+    }
+    
+    arquivo.close();
+    return 0;
+}
+

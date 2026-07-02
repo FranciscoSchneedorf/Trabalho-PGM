@@ -37,6 +37,7 @@ int menu()
     cout << "[5] Imagem negativa" << endl;
     cout << "[6] Filtro passa-baixa" << endl;
     cout << "[7] Escurecer borda" << endl;
+    cout << "[8] Iconização" << endl;
     cout << "[0] Sair" << endl;
 
     escolha = lerInteiro(": "); // Verificando se um numero foi digitado
@@ -51,9 +52,10 @@ int main()
 {
     // Variaveis
     static tImagem img_entrada;
-    string nome_user;
+    string nome_user, nome_saida;
     int escolha_user = 10;
     int colunas = 0, linhas = 0, tons = 0, return_carregaPGM = 0;
+    int** pix;
 
     while ((escolha_user = menu()) != 0)
     {
@@ -472,6 +474,48 @@ int main()
             cout << "O arquivo foi salvo corretamente. " << endl;
 
             break;
+        }
+
+        case 8:
+        {
+            //Variaveis
+            int iconizar = 0, sucesso = 0;
+
+
+            // Verificacao se a imagem foi inicializada
+            if (linhas == 0)
+            {
+                cout << "Nenhuma imagem foi inicializda. Tente novamente. " << endl;
+                break;
+            }
+            
+            iconizar = iconizarPGM(img_entrada, linhas, colunas, tons, nome_saida);
+
+            // Verificando se a funcao foi executada corretamente
+            if (iconizar != 0)
+            {
+                cout << "ERRO: Nao foi possivel gerar a imagem iconizada. Tente novamente. " << endl;
+                break;
+            }
+
+            cout << "Iconização foi realizada com sucesso!\nEscreva o nome da imagem a ser salva: " << endl;
+            cin >> nome_user;
+
+            sucesso = salvaPGM(nome_user + "_8" + ".pgm", img_entrada, colunas, linhas, tons);
+
+            // Verificando se a imagem foi salva corretamente
+            if (sucesso != 0)
+            {
+                cout << "ERRO: Nao foi possivel salvar o arquivo. " << endl;
+                break;
+            }
+
+            cout << "Arquivo salvo corretamente. " << endl;
+
+            break;
+        
+
+
         }
 
         default:
