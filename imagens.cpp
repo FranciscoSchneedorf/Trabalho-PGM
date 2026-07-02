@@ -185,7 +185,7 @@ int direitaPGM(tImagem img, int *lin, int *col)
     int total = (*lin) * (*col);
 
     /*------ MONTANDO AUX ------*/
-    // Laco para percores as linhas da imagem original
+    // Laco para percorrer as linhas da imagem original
     for (int i = 0; i < lin_original; i++)
     {
         int *pDestino = &aux[0][0]; // Ponteiro que aponta para o primeiro pixel da imagem auxiliar
@@ -201,7 +201,7 @@ int direitaPGM(tImagem img, int *lin, int *col)
         {
             *pDestino = *pOrigem; // Realocando os pixels
 
-            pOrigem++; // Avançando os pixels na matriz aux
+            pOrigem++; // Avancando para o proximo pixel da imagem original
 
             // Se ainda houver pixels para copiar, desce uma linha em aux
             if (j < col_original - 1)
