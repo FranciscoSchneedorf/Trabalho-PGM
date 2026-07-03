@@ -19,6 +19,8 @@ int menu()
     cout << "[5] Imagem negativa" << endl;
     cout << "[6] Filtro passa-baixa" << endl;
     cout << "[7] Escurecer borda" << endl;
+    cout << "[9] Filtro passa-baixa interativo" << endl;
+    cout << "[10] Espelhamento diagonal" << endl;
     cout << "[11] Redimensionamento por fator inteiro" << endl;
     cout << "[12] Recorte de regiao" << endl;
     cout << "[0] Sair" << endl;
@@ -445,6 +447,86 @@ int main()
             cin >> nome_user;
 
             sucesso = salvaPGM(nome_user + "_7" + ".pgm", img_entrada, colunas, linhas, tons);
+
+            if (sucesso != 0)
+            {
+                cout << "ERRO: Nao foi possivel salvar o arquivo." << endl;
+                break;
+            }
+
+            cout << "O arquivo foi salvo corretamente. " << endl;
+
+            break;
+        }
+
+        case 9:
+        {
+            // Variaveis
+            int passabaixaint = 0, sucesso = 0;
+
+            // Verificando se a imagem foi inicializada
+            if (linhas == 0)
+            {
+                cout << "Nenhuma imagem foi inicializada. Tente novamente." << endl;
+                break;
+            }
+
+            passabaixaint = passabaixainterativoPGM(img_entrada, linhas, colunas);
+
+            // Verificando se a funcao foi executada corretamente
+            if (passabaixaint != 0)
+            {
+                cout << "ERRO: Nao foi possivel aplicar o filtro." << endl;
+
+                break;
+            }
+
+            cout << "Filtro passa-baixa aplicado com sucesso!" << endl;
+
+            cout << "Escreva o nome do arquivo a ser salvo: " << endl;
+            cin >> nome_user;
+
+            sucesso = salvaPGM(nome_user + "_9" + ".pgm", img_entrada, colunas, linhas, tons);
+
+            if (sucesso != 0)
+            {
+                cout << "ERRO: Nao foi possivel salvar o arquivo." << endl;
+                break;
+            }
+
+            cout << "O arquivo foi salvo corretamente. " << endl;
+
+            break;
+        }
+
+        case 10:
+        {
+            // Variaveis
+            int espelhamento = 0, sucesso = 0;
+
+            // Verificando se a imagem foi inicializada
+            if (linhas == 0)
+            {
+                cout << "Nenhuma imagem foi inicializada. Tente novamente." << endl;
+                break;
+            }
+
+            espelhamento = espelhamentoDiagonalPGM(img_entrada, &linhas, &colunas);
+
+            // Verificando se a funcao foi executada corretamente
+            if (espelhamento != 0)
+            {
+                cout << "ERRO: Nao foi possivel aplicar o espelhamento." << endl;
+
+                break;
+            }
+
+            cout << "Espelhamento aplicado com sucesso!" << endl;
+
+            cout << "Escreva o nome do arquivo a ser salvo: " << endl;
+            cin >> nome_user;
+
+            sucesso = salvaPGM(nome_user + "_10" + ".pgm", img_entrada, colunas, linhas, tons);
 
             if (sucesso != 0)
             {

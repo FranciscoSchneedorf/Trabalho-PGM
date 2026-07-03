@@ -30,6 +30,9 @@ int negativoPGM(tImagem img, int lin, int col, int tons);
 int passabaixaPGM(tImagem img, int lin, int col);
 int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento);
 
+int passabaixainterativoPGM(tImagem img, int lin, int col);
+int espelhamentoDiagonalPGM(tImagem img, int *lin, int *col);
+
 int redimensionamentoPGM(tImagem img, int *lin, int *col);
 int recortePGM(tImagem img, int *lin, int *col);
 
