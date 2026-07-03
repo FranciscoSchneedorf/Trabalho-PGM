@@ -19,15 +19,11 @@ int menu()
     cout << "[5] Imagem negativa" << endl;
     cout << "[6] Filtro passa-baixa" << endl;
     cout << "[7] Escurecer borda" << endl;
-<<<<<<< HEAD
     cout << "[8] Iconizar" << endl;
     cout << "[9] Filtro passa-baixa interativo" << endl;
     cout << "[10] Espelhamento diagonal" << endl;
     cout << "[11] Redimensionamento por fator inteiro" << endl;
     cout << "[12] Recorte de regiao" << endl;
-=======
-    cout << "[8] Iconização" << endl;
->>>>>>> origin/main
     cout << "[0] Sair" << endl;
 
     escolha = lerInteiro(": "); // Verificando se um numero foi digitado
@@ -467,7 +463,6 @@ int main()
 
         case 8:
         {
-<<<<<<< HEAD
         //Variaveis
         int iconizar = 0, sucesso = 0;
 
@@ -660,46 +655,6 @@ int main()
             cout << "O arquivo foi salvo corretamente. " << endl;
 
             break;
-=======
-            //Variaveis
-            int iconizar = 0, sucesso = 0;
-
-
-            // Verificacao se a imagem foi inicializada
-            if (linhas == 0)
-            {
-                cout << "Nenhuma imagem foi inicializda. Tente novamente. " << endl;
-                break;
-            }
-            
-            iconizar = iconizarPGM(img_entrada, linhas, colunas, tons, nome_saida);
-
-            // Verificando se a funcao foi executada corretamente
-            if (iconizar != 0)
-            {
-                cout << "ERRO: Nao foi possivel gerar a imagem iconizada. Tente novamente. " << endl;
-                break;
-            }
-
-            cout << "Iconização foi realizada com sucesso!\nEscreva o nome da imagem a ser salva: " << endl;
-            cin >> nome_user;
-
-            sucesso = salvaPGM(nome_user + "_8" + ".pgm", img_entrada, colunas, linhas, tons);
-
-            // Verificando se a imagem foi salva corretamente
-            if (sucesso != 0)
-            {
-                cout << "ERRO: Nao foi possivel salvar o arquivo. " << endl;
-                break;
-            }
-
-            cout << "Arquivo salvo corretamente. " << endl;
-
-            break;
-        
-
-
->>>>>>> origin/main
         }
 
         default:
