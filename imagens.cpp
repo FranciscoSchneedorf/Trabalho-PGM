@@ -385,6 +385,61 @@ int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento)
     return 0;
 }
 
+int iconizarPGM(tImagem img, int *lin, int *col)
+{
+    // Variáveis
+    long soma[TAM_ICONE * TAM_ICONE];
+    int cont[TAM_ICONE * TAM_ICONE];
+    long *ps;
+    int *pc;
+
+    int lin_original = *lin;
+    int col_original = *col;
+
+    // Zerar acumuladores
+    for (ps = soma, pc = cont; ps < soma + TAM_ICONE * TAM_ICONE; ps++, pc++)
+    {
+        *ps = 0;
+        *pc = 0;
+    }
+
+    // Leitura linear pela matriz de píxels de origem
+    int lin_atual = 0, col_atual = 0;
+
+    for (int *p = &img[0][0]; p < &img[0][0] + lin_original * col_original; p++)
+    {
+        int bi = (lin_atual * TAM_ICONE) / lin_original;
+        int bj = (col_atual * TAM_ICONE) / col_original;
+
+        long *destSoma = soma + (bi * TAM_ICONE + bj);
+        int *destCont = cont + (bi * TAM_ICONE + bj);
+
+        *destSoma += *p;
+        *destCont += 1;
+
+        col_atual++;
+        if (col_atual == col_original)
+        {
+            col_atual = 0;
+            lin_atual++;
+        }
+    }
+
+    // Cálculo da média de cada pixel do ícone e sobrescreve a imagem
+    ps = soma;
+    pc = cont;
+    for (int *pi = &img[0][0]; pi < &img[0][0] + TAM_ICONE * TAM_ICONE; pi++, ps++, pc++)
+    {
+        *pi = (*pc > 0) ? (int)(*ps / *pc) : 0;
+    }
+
+    // Atualiza as dimensões da imagem
+    *lin = TAM_ICONE;
+    *col = TAM_ICONE;
+
+    return 0;
+}
+
 int passabaixainterativoPGM(tImagem img, int lin, int col)
 {
     int vezes = 0;
