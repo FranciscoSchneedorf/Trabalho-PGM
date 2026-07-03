@@ -235,7 +235,7 @@ int verticalPGM(tImagem img, int lin, int col)
 {
     static tImagem aux;
 
-    int *pOrigem = &img[0][0];                  // Aponta para o inicio da imagem original
+    int *pOrigem = &img[0][0];                    // Aponta para o inicio da imagem original
     int *pDestino = &aux[0][0] + (lin - 1) * col; // Aponta para o inicio da ultima linha de aux
 
     // Laco para percorrer as linhas da imagem original
@@ -267,7 +267,7 @@ int horizontalPGM(tImagem img, int lin, int col)
 {
     static tImagem aux;
 
-    int *pOrigem = &img[0][0];                  // Aponta para o inicio da imagem original
+    int *pOrigem = &img[0][0];                    // Aponta para o inicio da imagem original
     int *pDestino = &aux[0][0] + (lin - 1) * col; // Aponta para o inicio da ultima linha de aux
 
     // Laco para percorrer as linhas da imagem original
@@ -293,13 +293,12 @@ int horizontalPGM(tImagem img, int lin, int col)
     return 0;
 }
 
-
 int negativoPGM(tImagem img, int lin, int col, int tons)
 {
     // Laco para passar por todos os pixel da matriz
-    for (int *p = 0; p < &img[0][0] + col* lin; p++)
+    for (int *p = 0; p < &img[0][0] + col * lin; p++)
     {
-            *p = tons - *p; // Subtrai-se de 255 o valor do pixel atual. Se for 0, 255 - 0 = 255. Logo, o pixel que era preto vira brnaco, e vice-versa
+        *p = tons - *p; // Subtrai-se de 255 o valor do pixel atual. Se for 0, 255 - 0 = 255. Logo, o pixel que era preto vira brnaco, e vice-versa
     }
 
     return 0;
@@ -315,7 +314,6 @@ int passabaixaPGM(tImagem img, int lin, int col)
     int *destino = &aux[0][0];
     int *fim = origem + lin * col;
 
-
     for (; origem < fim; origem++, destino++)
     {
         *destino = *origem;
@@ -324,7 +322,7 @@ int passabaixaPGM(tImagem img, int lin, int col)
     // Laco para passar por todos os pixels da imagem, comecando em 1 para linhas e colunas para nao contabilizar as bordas
     for (int *linha_central = &img[1][1]; linha_central < &img[lin - 1][1]; linha_central += col)
     {
-        for (int *p = linha_central; p < linha_central+(col - 2); p++)
+        for (int *p = linha_central; p < linha_central + (col - 2); p++)
         {
             soma = 0; // Soma zerada a cada pixel
 
@@ -361,23 +359,24 @@ int escurecerbordaPGM(tImagem img, int lin, int col, int fator, int decremento)
     int fator_atual = 0;
 
     // Laco para percorrer pixel a pixel, decrescendo de acordo com o fator e a camada em que se encontra
-    for (int *p = &img[0][0]; p < &img[0][0] + (lin) * (col); p++){
+    for (int *p = &img[0][0]; p < &img[0][0] + (lin) * (col); p++)
+    {
 
-    int offset = p - &img[0][0];   // posição linear do pixel
-    int i = offset / col;          // linha
-    int j = offset % col;          // coluna
+        int offset = p - &img[0][0]; // posição linear do pixel
+        int i = offset / col;        // linha
+        int j = offset % col;        // coluna
 
-            camada = min(min(i, lin - 1 - i), min(j, col - 1 - j)); // Calculando a menor distancia entre o pixel e as bordas; A menor distancia indica em que camada o pixel esta
+        camada = min(min(i, lin - 1 - i), min(j, col - 1 - j)); // Calculando a menor distancia entre o pixel e as bordas; A menor distancia indica em que camada o pixel esta
 
-            fator_atual = fator - (camada * decremento);
+        fator_atual = fator - (camada * decremento);
 
-            // Se o fator ficar negativo, nao escurece mais
-            if (fator_atual < 0)
-            {
-                fator_atual = 0;
-            }
+        // Se o fator ficar negativo, nao escurece mais
+        if (fator_atual < 0)
+        {
+            fator_atual = 0;
+        }
 
-            img[i][j] = max(0, img[i][j] - fator_atual); // Escurece o pixel, sem deixar ficar abaixo de 0
+        img[i][j] = max(0, img[i][j] - fator_atual); // Escurece o pixel, sem deixar ficar abaixo de 0
     }
 
     return 0;
@@ -468,7 +467,7 @@ int espelhamentoDiagonalPGM(tImagem img, int *lin, int *col)
 
     int *base_img = &img[0][0];
     int *base_aux = &aux[0][0];
-    int *fim_img  = base_img + (*lin) * (*col); // usa os valores apontados
+    int *fim_img = base_img + (*lin) * (*col); // usa os valores apontados
 
     // Percorre cada linha da imagem original
     for (int *linha = base_img; linha < fim_img; linha += *col)
@@ -489,9 +488,9 @@ int espelhamentoDiagonalPGM(tImagem img, int *lin, int *col)
     }
 
     // Copia o resultado transposto de volta
-    int *origem   = base_aux;
+    int *origem = base_aux;
     int *destino2 = base_img;
-    int *limite   = destino2 + (*lin) * (*col);
+    int *limite = destino2 + (*lin) * (*col);
 
     for (; destino2 < limite; destino2++, origem++)
     {
@@ -579,6 +578,13 @@ int redimensionamentoPGM(tImagem img, int *lin, int *col)
     // Reducao
     else if (modo == 2)
     {
+        // Verifica se as dimensoes sao divisiveis pelo fator
+        if (lin_original % fator != 0 || col_original % fator != 0)
+        {
+            cout << "ERRO: Para reducao, linhas e colunas devem ser divisiveis pelo fator." << endl;
+            return 1;
+        }
+
         // Calcula as novas dimensoes
         nova_lin = lin_original / fator;
         nova_col = col_original / fator;
@@ -590,8 +596,8 @@ int redimensionamentoPGM(tImagem img, int *lin, int *col)
             return 1;
         }
 
-        int *pOrigem = &img[0][0]; // Aponta para o comeco da imagem auxiliar. Sera usado para escrever a imagem reduzida
-        int *pAux = &aux[0][0];    // Aponta para o comeco da linha atual da imagem original
+        int *pOrigem = &img[0][0];
+        int *pAux = &aux[0][0];
 
         // Laco para percorrer pelas linhas
         for (int i = 0; i < lin_original; i++)
@@ -599,13 +605,14 @@ int redimensionamentoPGM(tImagem img, int *lin, int *col)
             // Laco para percorrer pelas colunas
             for (int j = 0; j < col_original; j++)
             {
-                // Verificando se o fator coincide com a linha para fazer a reducao
+                // Copia apenas pixels em linhas e colunas multiplas do fator
                 if (i % fator == 0 && j % fator == 0)
                 {
-                    *pAux = *pOrigem; // Atualiza aux
-                    pAux++;           // Avanca um pixel
+                    *pAux = *pOrigem;
+                    pAux++;
                 }
-                pOrigem++; // Avanca na imagem original
+
+                pOrigem++;
             }
         }
     }
@@ -615,7 +622,6 @@ int redimensionamentoPGM(tImagem img, int *lin, int *col)
         return 1;
     }
 
-    
     /*------ COPIANDO AUX PARA IMG ORIGINAL ------*/
     // Atualiza as dimensoes da imagem
     *lin = nova_lin;
@@ -716,7 +722,6 @@ int recortePGM(tImagem img, int *lin, int *col)
         }
     }
 
-    
     /*------ COPIANDO AUX PARA IMG ORIGINAL ------*/
     *lin = altura;
     *col = largura;
