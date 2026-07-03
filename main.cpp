@@ -635,9 +635,9 @@ int main()
 
             recorte = recortePGM(img_entrada, &linhas, &colunas);
 
+            // A propria funcao recortePGM ja mostra o erro especifico
             if (recorte != 0)
             {
-                cout << "ERRO: Nao foi possivel recortar a imagem" << endl;
                 break;
             }
 
