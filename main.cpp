@@ -2,27 +2,9 @@
 #include <string>
 #include "imagens.h"
 
-
 using namespace std;
 
 // Funcoes secundarias
-
-int lerInteiro(string mensagem)
-{
-    int valor = 0;
-    cout << mensagem;
-    cin >> valor;
-
-    while (cin.fail())
-    {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "ERRO: Entrada invalida. Digite um numero: " << endl;
-        cin >> valor;
-    }
-
-    return valor;
-}
 
 int menu()
 {
@@ -37,14 +19,21 @@ int menu()
     cout << "[5] Imagem negativa" << endl;
     cout << "[6] Filtro passa-baixa" << endl;
     cout << "[7] Escurecer borda" << endl;
+<<<<<<< HEAD
+    cout << "[8] Iconizar" << endl;
+    cout << "[9] Filtro passa-baixa interativo" << endl;
+    cout << "[10] Espelhamento diagonal" << endl;
+    cout << "[11] Redimensionamento por fator inteiro" << endl;
+    cout << "[12] Recorte de regiao" << endl;
+=======
     cout << "[8] Iconização" << endl;
+>>>>>>> origin/main
     cout << "[0] Sair" << endl;
 
     escolha = lerInteiro(": "); // Verificando se um numero foi digitado
 
     return escolha;
 }
-
 
 // Funcao principal
 
@@ -478,6 +467,200 @@ int main()
 
         case 8:
         {
+<<<<<<< HEAD
+        //Variaveis
+        int iconizar = 0, sucesso = 0;
+
+        // Verificacao se a imagem foi inicializada
+        if (linhas == 0)
+        {
+            cout << "Nenhuma imagem foi inicializda. Tente novamente. " << endl;
+            break;
+        }
+        
+        iconizar = iconizarPGM(img_entrada, &linhas, &colunas);
+
+        // Verificando se a funcao foi executada corretamente
+        if (iconizar != 0)
+        {
+            cout << "ERRO: Nao foi possivel gerar a imagem iconizada. Tente novamente. " << endl;
+            break;
+        }
+
+        cout << "Iconização foi realizada com sucesso!\nEscreva o nome da imagem a ser salva: " << endl;
+        cin >> nome_user;
+
+        sucesso = salvaPGM(nome_user + "_8" + ".pgm", img_entrada, colunas, linhas, tons);
+
+        // Verificando se a imagem foi salva corretamente
+        if (sucesso != 0)
+        {
+            cout << "ERRO: Nao foi possivel salvar o arquivo. " << endl;
+            break;
+        }
+
+        cout << "Arquivo salvo corretamente. " << endl;
+
+        break;
+        }
+
+        case 9:
+        {
+            // Variaveis
+            int passabaixaint = 0, sucesso = 0;
+
+            // Verificando se a imagem foi inicializada
+            if (linhas == 0)
+            {
+                cout << "Nenhuma imagem foi inicializada. Tente novamente." << endl;
+                break;
+            }
+
+            passabaixaint = passabaixainterativoPGM(img_entrada, linhas, colunas);
+
+            // Verificando se a funcao foi executada corretamente
+            if (passabaixaint != 0)
+            {
+                cout << "ERRO: Nao foi possivel aplicar o filtro." << endl;
+
+                break;
+            }
+
+            cout << "Filtro passa-baixa aplicado com sucesso!" << endl;
+
+            cout << "Escreva o nome do arquivo a ser salvo: " << endl;
+            cin >> nome_user;
+
+            sucesso = salvaPGM(nome_user + "_9" + ".pgm", img_entrada, colunas, linhas, tons);
+
+            if (sucesso != 0)
+            {
+                cout << "ERRO: Nao foi possivel salvar o arquivo." << endl;
+                break;
+            }
+
+            cout << "O arquivo foi salvo corretamente. " << endl;
+
+            break;
+        }
+
+        case 10:
+        {
+            // Variaveis
+            int espelhamento = 0, sucesso = 0;
+
+            // Verificando se a imagem foi inicializada
+            if (linhas == 0)
+            {
+                cout << "Nenhuma imagem foi inicializada. Tente novamente." << endl;
+                break;
+            }
+
+            espelhamento = espelhamentoDiagonalPGM(img_entrada, &linhas, &colunas);
+
+            // Verificando se a funcao foi executada corretamente
+            if (espelhamento != 0)
+            {
+                cout << "ERRO: Nao foi possivel aplicar o espelhamento." << endl;
+
+                break;
+            }
+
+            cout << "Espelhamento aplicado com sucesso!" << endl;
+
+            cout << "Escreva o nome do arquivo a ser salvo: " << endl;
+            cin >> nome_user;
+
+            sucesso = salvaPGM(nome_user + "_10" + ".pgm", img_entrada, colunas, linhas, tons);
+
+            if (sucesso != 0)
+            {
+                cout << "ERRO: Nao foi possivel salvar o arquivo." << endl;
+                break;
+            }
+
+            cout << "O arquivo foi salvo corretamente. " << endl;
+
+            break;
+        }
+
+        case 11:
+        {
+            // Variaveis
+            int redimensionamento = 0, sucesso = 0;
+
+            // Verificando se a imagem foi inicializada
+            if (linhas == 0)
+            {
+                cout << "Nenhuma imagem foi inicializada. Tente novamente." << endl;
+                break;
+            }
+
+            redimensionamento = redimensionamentoPGM(img_entrada, &linhas, &colunas);
+
+            // Verificando se a funcao foi executada corretamente
+            if (redimensionamento != 0)
+            {
+                cout << "ERRO: Nao foi possivel aplicar o redimensionamento." << endl;
+
+                break;
+            }
+
+            cout << "Redimensionamento aplicado com sucesso!" << endl;
+
+            cout << "Escreva o nome do arquivo a ser salvo: " << endl;
+            cin >> nome_user;
+
+            sucesso = salvaPGM(nome_user + "_11" + ".pgm", img_entrada, colunas, linhas, tons);
+
+            if (sucesso != 0)
+            {
+                cout << "ERRO: Nao foi possivel salvar o arquivo." << endl;
+                break;
+            }
+
+            cout << "O arquivo foi salvo corretamente. " << endl;
+
+            break;
+        }
+
+        case 12:
+        {
+            // Variaveis
+            int recorte = 0, sucesso = 0;
+
+            // Verificando se a imagem foi inicializada
+            if (linhas == 0)
+            {
+                cout << "Nenhuma imagem foi inicializada. Tente novamente." << endl;
+                break;
+            }
+
+            recorte = recortePGM(img_entrada, &linhas, &colunas);
+
+            if (recorte != 0)
+            {
+                cout << "ERRO: Nao foi possivel recortar a imagem" << endl;
+                break;
+            }
+
+            cout << "Imagem recortada com sucesso!" << endl;
+
+            cout << "Escreva o nome do arquivo a ser salvo: " << endl;
+            cin >> nome_user;
+
+            sucesso = salvaPGM(nome_user + "_12" + ".pgm", img_entrada, colunas, linhas, tons);
+
+            if (sucesso != 0)
+            {
+                cout << "ERRO: Nao foi possivel salvar o arquivo." << endl;
+                break;
+            }
+
+            cout << "O arquivo foi salvo corretamente. " << endl;
+
+            break;
+=======
             //Variaveis
             int iconizar = 0, sucesso = 0;
 
@@ -516,6 +699,7 @@ int main()
         
 
 
+>>>>>>> origin/main
         }
 
         default:
