@@ -24,27 +24,25 @@ int lerInteiro(string mensagem)
 
 int carregaPGM(string nome, tImagem img, int *col, int *lin, int *tons)
 {
-    // Variaveis
     string tipo;
 
-    ifstream arquivo(nome); // Abertura do arquivo
+    ifstream arquivo(nome);
 
-    // Verificacoes
     if (!arquivo.is_open())
     {
-        return 1;
+        return 1; // Arquivo nao encontrado
     }
 
     arquivo >> tipo;
 
     if (tipo != "P2")
     {
-        cout << "ERRO: Arquivo nao tem formato P2." << endl;
-        return 1;
+        arquivo.close();
+        return 2; // Arquivo existe, mas nao e P2
     }
 
-    // Leitura do arquivo
     arquivo >> *col >> *lin >> *tons;
+
     for (int *p = &img[0][0]; p < &img[0][0] + (*lin) * (*col); p++)
     {
         arquivo >> *p;
