@@ -24,7 +24,7 @@ O projeto é composto pelos seguintes arquivos:
 * `main.cpp`: contém a função principal, o menu de opções e as chamadas das funções de processamento.
 * `imagens.cpp`: contém a implementação das funções de leitura, escrita e processamento das imagens.
 * `imagens.h`: contém as constantes, o tipo da imagem e os protótipos das funções.
-* `README.md`: contém as informações do projeto, instruções de compilação e uso.
+* `README.txt`: contém as informações do projeto, instruções de compilação e uso.
 
 ## Como compilar
 
